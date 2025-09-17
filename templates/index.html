@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="main-sections">
+<section class="hero">
+  <div class="hero-grid">
+    <div>
+      <h1>{{ profile.full_name if profile else "Name" }}</h1>
+      <p class="muted">{{ profile.headline if profile else "Headline" }}</p>
+
+      {% if profile %}
+        {% if profile.about %}
+          <p>{{ profile.about }}</p>
+        {% else %}
+          <p>empty.</p>
+        {% endif %}
+
+        {% if profile.email %}
+          <p><a href="mailto:{{ profile.email }}">{{ profile.email }}</a></p>
+        {% endif %}
+
+        {% if profile.phone %}
+          <p>{{ profile.phone }}</p>
+        {% endif %}
+
+        {% if profile.location %}
+          <p>{{ profile.location }}</p>
+        {% endif %}
+      {% endif %}
+    </div>
+
+    <div class="photo">
+      {% if profile and profile.photo_filename %}
+        <img src="{{ url_for('uploaded_file', filename=profile.photo_filename) }}" alt="Moje zdjęcie">
+      {% else %}
+        <div class="placeholder">empty.</div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Experience</h2>
+  <ul class="cards">
+    {% for e in experiences %}
+      <li class="card">
+        <h3>{{ e.role }} — {{ e.company }}</h3>
+        <p class="muted">
+          {{ e.start_date.strftime("%Y-%m") }} —
+          {% if e.is_current %}I currently work here{% elif e.end_date %}{{ e.end_date.strftime("%Y-%m") }}{% else %}—{% endif %}
+        </p>
+        {% if e.description %}<p>{{ e.description }}</p>{% endif %}
+      </li>
+    {% else %}
+      <p>empty.</p>
+    {% endfor %}
+  </ul>
+</section>
+
+<section>
+  <h2>Education</h2>
+  <ul class="cards">
+    {% for ed in education %}
+      <li class="card">
+        <h3>{{ ed.school }}</h3>
+        <p class="muted">
+          {{ ed.start_date.strftime("%Y-%m") }}
+          {% if ed.end_date %} — {{ ed.end_date.strftime("%Y-%m") }}{% endif %}
+        </p>
+        {% if ed.degree %}<p>{{ ed.degree }}</p>{% endif %}
+        {% if ed.description %}<p>{{ ed.description }}</p>{% endif %}
+      </li>
+    {% else %}
+      <p>empty.</p>
+    {% endfor %}
+  </ul>
+</section>
+
+<section>
+  <h2>Courses</h2>
+  <ul class="cards">
+    {% for c in courses %}
+      <li class="card">
+        <h3>{{ c.title }}</h3>
+        <p class="muted">
+          {% if c.provider %}{{ c.provider }}{% endif %}
+          {% if c.date_completed %} • {{ c.date_completed.strftime("%Y-%m-%d") }}{% endif %}
+        </p>
+        {% if c.notes %}<p>{{ c.notes }}</p>{% endif %}
+        {% if c.credential_url %}<p><a href="{{ c.credential_url }}" target="_blank" rel="noopener">Certyfikat</a></p>{% endif %}
+      </li>
+    {% else %}
+      <p>empty.</p>
+    {% endfor %}
+  </ul>
+</section>
+
+<section>
+  <h2>Languages</h2>
+  <ul class="language-cards">
+    {% for lang in languages %}
+      <li class="card">
+        <h3>{{ lang.name }}</h3>
+        <p class="muted">{{ lang.level }}</p>
+      </li>
+    {% else %}
+      <p>empty.</p>
+    {% endfor %}
+  </ul>
+</section>
+
+<section>
+  <h2>Skills</h2>
+  <ul class="skills-cards">
+    {% for skill in skills %}
+      <li class="card">
+        <h3>{{ skill.name }}</h3>
+      </li>
+    {% else %}
+      <p>empty.</p>
+    {% endfor %}
+  </ul>
+</section>
+
+<section>
+  <h2>Links</h2>
+  <ul class="cards">
+    {% for link in links %}
+      <li class="card">
+        <h2><a href="{{ link.url }}" target="_blank" rel="noopener">{{ link.name }}</a></h2>
+      </li>
+    {% else %}
+      <p>empty.</p>
+    {% endfor %}
+  </ul>
+</section>
+</div>
+<div class="main-sections-2">
+<section>
+  <h2>Portfolio</h2>
+  <ul class="cards">
+    {% for project in portfolio %}
+      <li class="card">
+        <h3>{{ project.title }}</h3>
+        {% if project.filename %}
+          <p><a href="{{ url_for('uploaded_file', filename='portfolio/' + project.filename) }}" target="_blank">{{ project.filename }}</a></p>
+        {% endif %}
+        {% if project.description %}<p>{{ project.description }}</p>{% endif %}
+      </li>
+    {% else %}
+      <p>empty.</p>
+    {% endfor %}
+  </ul>
+</section>
+</diV>
+
+<div class="main-sections-2">
+  <section>
+    <h2>Contact me</h2>
+    <div class="contact-form">
+      <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+          {{ form.name.label }}
+          {{ form.name(size=32, class="form-control") }}
+        </div>
+
+        <div class="form-group">
+          {{ form.email.label }}
+          {{ form.email(size=32, class="form-control") }}
+        </div>
+
+        <div class="form-group">
+          {{ form.content.label }}
+          {{ form.content(rows=4, cols=40, class="form-control") }}
+        </div>
+
+        <div class="form-actions">
+          {{ form.submit(class="btn") }}
+        </div>
+      </form>
+    </div>
+  </section>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const sections = document.querySelectorAll(".main-sections section, .main-sections-2 section");
+
+  sections.forEach((section, index) => {
+    setTimeout(() => {
+      section.classList.add("show");
+    }, index * 200); // opóźnienie 200ms między sekcjami
+  });
+});
+</script>
+
+
+{% endblock %}

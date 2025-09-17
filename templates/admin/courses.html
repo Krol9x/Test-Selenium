@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<button class="btn back-btn" onclick="history.back()">⬅</button>
+<h2>Courses</h2>
+<form method="POST" class="form">
+  {{ form.hidden_tag() }}
+  <label>{{ form.title.label }} {{ form.title(size=40) }}</label>
+  <label>{{ form.provider.label }} {{ form.provider(size=40) }}</label>
+  <label>{{ form.date_completed.label }} {{ form.date_completed() }} <small class="muted">YYYY-MM-DD</small></label>
+  <label>{{ form.credential_url.label }} {{ form.credential_url(size=60) }}</label>
+  <label>{{ form.notes.label }} {{ form.notes(rows=3) }}</label>
+  {{ form.submit(class="btn") }}
+</form>
+
+
+<ul class="table">
+  {% for c in courses %}
+    <li class="row">
+      <div><strong>{{ c.title }}</strong> {% if c.provider %}— {{ c.provider }}{% endif %}</div>
+      <div class="muted">{% if c.date_completed %}{{ c.date_completed }}{% endif %}</div>
+      <form method="POST" action="{{ url_for('delete_course', course_id=c.id) }}">
+        <button class="btn danger" type="submit">Delete</button>
+      </form>
+    </li>
+  {% else %}
+    <p>Brak kursów.</p>
+  {% endfor %}
+</ul>
+{% endblock %}

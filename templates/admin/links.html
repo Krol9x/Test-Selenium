@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<button class="btn back-btn" onclick="history.back()">⬅</button>
+<h2>Links</h2>
+
+<form method="POST" class="form">
+  {{ form.hidden_tag() }}
+  <div class="form-group">
+    <label>{{ form.name.label }}</label>
+    {{ form.name(class="input") }}
+  </div>
+  <div class="form-group">
+    <label>{{ form.url.label }}</label>
+    {{ form.url(class="input") }}
+  </div>
+  <div class="form-actions">
+    {{ form.submit(class="btn") }}
+  </div>
+</form>
+
+<ul class="table">
+  {% for link in links %}
+    <li class="row">
+      <h3>{{ link.name }}</h3>
+      <p><a href="{{ link.url }}" target="_blank">{{ link.url }}</a></p>
+      <div class="actions">
+        <form method="POST" action="{{ url_for('delete_link', link_id=link.id) }}">
+          <button class="btn danger" type="submit">Delete</button>
+        </form>
+      </div>
+    </li>
+  {% else %}
+    <p>Brak linków.</p>
+  {% endfor %}
+</ul>
+{% endblock %}

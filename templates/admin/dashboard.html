@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Admin Panel</h2>
+<div class="admin-grid">
+  <a class="btn" href="{{ url_for('admin_profile') }}">Profile & Photo</a>
+  <a class="btn" href="{{ url_for('admin_experience') }}">Experience</a>
+  <a class="btn" href="{{ url_for('admin_education') }}">Education</a>
+  <a class="btn" href="{{ url_for('admin_courses') }}">Courses</a>
+  <a class="btn" href="{{ url_for('admin_languages') }}">Languages</a>
+  <a class="btn" href="{{ url_for('admin_skills') }}">Skills</a>
+  <a class="btn" href="{{ url_for('admin_portfolio') }}">Portfolio</a>
+  <a class="btn" href="{{ url_for('admin_links') }}">Links</a>
+  <a class="btn" href="{{ url_for('admin_messages') }}">Messages</a>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const buttons = document.querySelectorAll(".admin-grid .btn");
+
+  buttons.forEach((btn, index) => {
+    setTimeout(() => {
+      btn.classList.add("show");
+    }, index * 180); 
+  });
+});
+</script>
+{% endblock %}

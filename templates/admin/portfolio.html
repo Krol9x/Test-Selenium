@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<button class="btn back-btn" onclick="history.back()">⬅</button>
+<h2>Portfolio</h2>
+
+<form method="POST" enctype="multipart/form-data" class="form">
+  {{ form.hidden_tag() }}
+  <div class="form-group">
+    <label>{{ form.title.label }}</label>
+    {{ form.title(size=40, class="input") }}
+  </div>
+  <div class="form-group">
+    <label>{{ form.description.label }}</label>
+    {{ form.description(rows=4, class="textarea") }}
+  </div>
+  <div class="form-group">
+    <label>{{ form.file.label }}</label>
+    {{ form.file(class="input") }}
+  </div>
+  <div class="form-actions">
+    {{ form.submit(class="btn") }}
+  </div>
+</form>
+
+<ul class="table">
+  {% for project in projects %}
+    <li class="row">
+      <div class="col">
+        <strong>{{ project.title }}</strong>
+        {% if project.filename %}
+          <p><a href="{{ url_for('uploaded_file', filename='portfolio/' + project.filename) }}" target="_blank">{{ project.filename }}</a></p>
+        {% endif %}
+        {% if project.description %}
+          <p>{{ project.description }}</p>
+        {% endif %}
+      </div>
+      <div class="col actions">
+        <form method="POST" action="{{ url_for('delete_portfolio', project_id=project.id) }}">
+          <button class="btn danger" type="submit">Delete</button>
+        </form>
+      </div>
+    </li>
+  {% else %}
+    <li class="row"><p>empty.</p></li>
+  {% endfor %}
+</ul>
+{% endblock %}

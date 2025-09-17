@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<button class="btn back-btn" onclick="history.back()">⬅</button>
+<h2>Education</h2>
+<form method="POST" class="form">
+  {{ form.hidden_tag() }}
+  <label>{{ form.school.label }} {{ form.school(size=40) }}</label>
+  <label>{{ form.degree.label }} {{ form.degree(size=40) }}</label>
+  <label>{{ form.start_date.label }} {{ form.start_date() }} <small class="muted">YYYY-MM-DD</small></label>
+  <label>{{ form.end_date.label }} {{ form.end_date() }} <small class="muted">YYYY-MM-DD</small></label>
+  <label>{{ form.description.label }} {{ form.description(rows=4) }}</label>
+  {{ form.submit(class="btn") }}
+</form>
+
+
+<ul class="table">
+  {% for ed in records %}
+    <li class="row">
+      <div><strong>{{ ed.school }}</strong> {% if ed.degree %}— {{ ed.degree }}{% endif %}</div>
+      <div class="muted">{{ ed.start_date }} {% if ed.end_date %}— {{ ed.end_date }}{% endif %}</div>
+      <form method="POST" action="{{ url_for('delete_education', edu_id=ed.id) }}">
+        <button class="btn danger" type="submit">Delete</button>
+      </form>
+    </li>
+  {% else %}
+    <p>empty.</p>
+  {% endfor %}
+</ul>
+{% endblock %}

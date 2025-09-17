@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ profile.full_name if profile else 'Portfolio' }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/app.css') }}">
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="hamburger-nav">
+  <div class="hamburger" id="hamburger">&#9776;</div>
+  <div class="menu" id="menu">
+    <a href="{{ url_for('index') }}">Home</a>
+    {% if current_user.is_authenticated %}
+      <a href="{{ url_for('admin_dashboard') }}">Admin</a>
+      <a href="{{ url_for('logout') }}">Logout</a>
+    {% else %}
+      <a href="{{ url_for('login') }}">Login</a>
+    {% endif %}
+  </div>
+  </nav>
+    </header>
+
+    <main class="container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-area">
+            {% for category, message in messages %}
+              <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+      <br></br>
+    </footer>
+  </body>
+</html>
+
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const menu = document.getElementById('menu');
+  const overlay = document.getElementById('overlay');
+
+  function toggleMenu() {
+    menu.classList.toggle('show');
+    overlay.classList.toggle('show');
+    hamburger.classList.toggle('active');
+  }
+
+  hamburger.addEventListener('click', toggleMenu);
+  overlay.addEventListener('click', toggleMenu);
+
+  menu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      menu.classList.remove('show');
+      overlay.classList.remove('show');
+      hamburger.classList.remove('active');
+    });
+  });
+</script>
